@@ -103,7 +103,9 @@ function App() {
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
-      <Header/>
+      <Header
+        isLoggedIn={isLoggedIn}
+      />
       <Routes>
         <Route
           path="/"

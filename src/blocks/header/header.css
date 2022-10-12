@@ -1,5 +1,8 @@
 .header {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
   min-height: 120px;
   margin: 0 19px;
   border-bottom: 1px solid rgba(84, 84, 84, .7);
@@ -9,6 +12,6 @@
   .header {
     min-height: 84px;
     margin: 0;
-    padding-left: 27px;
+    padding: 0 30px;
   }
 }
