@@ -54,3 +54,11 @@
 @import url(./blocks/popup/__figure/popup__figure.css);
 @import url(./blocks/popup/__photo/popup__photo.css);
 @import url(./blocks/popup/__caption/popup__caption.css);
+
+@import url(./blocks/form/form.css);
+@import url(./blocks/form/__block/form__block.css);
+@import url(./blocks/form/__title/form__title.css);
+@import url(./blocks/form/__input/form__input.css);
+@import url(./blocks/form/__submit/form__submit.css);
+@import url(./blocks/form/__tip/form__tip.css);
+@import url(./blocks/form/__link/form__link.css);

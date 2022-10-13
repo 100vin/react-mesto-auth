@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import Header from './Header';
 import Main from './Main';
@@ -15,6 +15,8 @@ import api from '../utils/api';
 import avatarDefault from '../images/avatar.jpg';
 
 function App() {
+  const location = useLocation();
+
   const [currentUser, setCurrentUser] = useState({
     name: 'Жак-Ив Кусто',
     about: 'Исследователь океана',
@@ -136,10 +138,9 @@ function App() {
           path="*"
           element={isLoggedIn ? <Navigate to="/" /> : <Navigate to="/sign-in" />}
         />
-
-      
       </Routes>
-      <Footer/>
+
+      {location.pathname.includes('sign') ? '' : <Footer/>}
       
       <EditAvatarPopup
         isOpen={isEditAvatarPopupOpen}

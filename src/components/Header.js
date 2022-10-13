@@ -16,8 +16,8 @@ function Header({ isLoggedIn }) {
             </>
             ) 
           : location.pathname.includes('sign-in') 
-            ? (<Link className="header__link" to="/sign-up">Регистрация</Link>)
-            : (<Link className="header__link" to="/sign-in">Войти</Link>  )
+            ? <Link className="header__link" to="/sign-up">Регистрация</Link>
+            : <Link className="header__link" to="/sign-in">Войти</Link>
         }
       </nav>
     </header>
