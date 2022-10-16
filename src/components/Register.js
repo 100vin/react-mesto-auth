@@ -1,9 +1,25 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
-function Register() {
+function Register( {onRegister} ) {
+  const [values, setValues] = useState({
+    email: '',
+    password: ''
+  });
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    onRegister(values);
+  }
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setValues({ ...values, [name]: value }); 
+  }
+
   return (
     <main className="content">
-      <form className="form" name="formSignIn"> 
+      <form className="form" name="formSignUp" onSubmit={handleSubmit}> 
         <div className="form__block">
           <h2 className="form__title">Регистрация</h2>
           <input
@@ -13,8 +29,8 @@ function Register() {
             type="email"
             placeholder="Email"
             required
-            // value={email}
-            // onChange={handleChangeEmail}
+            value={values.email}
+            onChange={handleChange}
           />
           <span className="form__input-error" id="input-email-error"></span>
           <input
@@ -26,8 +42,8 @@ function Register() {
             maxLength="12"
             placeholder="Пароль"
             required
-            // value={password}
-            // onChange={handleChangePassword}
+            value={values.password}
+            onChange={handleChange}
           />
           <span className="form__input-error" id="input-password-error"></span>
         </div>

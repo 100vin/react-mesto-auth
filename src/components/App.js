@@ -11,6 +11,8 @@ import AddPlacePopup from './AddPlacePopup';
 import ImagePopup from './ImagePopup';
 import Login from './Login';
 import Register from './Register';
+import ProtectedRoute from './ProtectedRoute';
+import InfoTooltip from './InfoTooltip';
 import api from '../utils/api';
 import avatarDefault from '../images/avatar.jpg';
 
@@ -27,8 +29,13 @@ function App() {
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
+  const [isTooltipPopupOpen, setTooltipPopupOpen] = useState(true);
+  const [tooltipData, setTooltipData] = useState({
+    type: 'success',
+    message: 'Успешно!'
+  });
   const [selectedCard, setSelectedCard] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   useEffect(() => {
     Promise.all([
@@ -46,6 +53,7 @@ function App() {
     setEditAvatarPopupOpen(false);
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
+    setTooltipPopupOpen(false);
     setSelectedCard(null);
   }
 
@@ -103,6 +111,15 @@ function App() {
       .finally(() => closeAllPopups());
   }
 
+  function handleRegister() {
+
+  }
+  
+  function handleLogin() {
+
+  }
+
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Header
@@ -112,26 +129,28 @@ function App() {
         <Route
           path="/"
           element={
-            <Main
-              cards={cards}
-              onEditAvatar={handleEditAvatarClick}
-              onEditProfile={handleEditProfileClick}
-              onAddPlace={handleAddPlaceClick}
-              onCardClick={handleCardClick}
-              onCardLike={handleCardLike}
-              onCardDelete={handleCardDelete}
-            />
+            <ProtectedRoute isLoggedIn={isLoggedIn}>
+              <Main
+                cards={cards}
+                onEditAvatar={handleEditAvatarClick}
+                onEditProfile={handleEditProfileClick}
+                onAddPlace={handleAddPlaceClick}
+                onCardClick={handleCardClick}
+                onCardLike={handleCardLike}
+                onCardDelete={handleCardDelete}
+              />
+            </ProtectedRoute>
           }
         />
 
         <Route
           path="/sign-up"
-          element={<Register />}
+          element={<Register onRegister={handleRegister} />}
         />
 
         <Route
           path="/sign-in"
-          element={<Login />}
+          element={<Login onLogin={handleLogin} />}
         />
 
         <Route
@@ -163,6 +182,13 @@ function App() {
       <ImagePopup
         card={selectedCard}
         onClose={closeAllPopups}
+      />
+
+      <InfoTooltip
+        isOpen={isTooltipPopupOpen}
+        onClose={closeAllPopups}
+        type={tooltipData.type}
+        message={tooltipData.message}
       />
 
       <PopupWithForm

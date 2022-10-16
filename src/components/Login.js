@@ -1,9 +1,24 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
 
-function Login() {
+function Login( {onLogin} ) {
+  const [values, setValues] = useState({
+    email: '',
+    password: ''
+  });
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    onLogin(values);
+  }
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setValues({ ...values, [name]: value }); 
+  }
+
   return (
     <main className="content">
-      <form className="form" name="formSignIn"> 
+      <form className="form" name="formSignIn" onSubmit={handleSubmit}> 
         <div className="form__block">
           <h2 className="form__title">Вход</h2>
           <input
@@ -13,8 +28,8 @@ function Login() {
             type="email"
             placeholder="Email"
             required
-            // value={email}
-            // onChange={handleChangeEmail}
+            value={values.email}
+            onChange={handleChange}
           />
           <span className="form__input-error" id="input-email-error"></span>
           <input
@@ -26,8 +41,8 @@ function Login() {
             maxLength="12"
             placeholder="Пароль"
             required
-            // value={password}
-            // onChange={handleChangePassword}
+            value={values.password}
+            onChange={handleChange}
           />
           <span className="form__input-error" id="input-password-error"></span>
         </div>
