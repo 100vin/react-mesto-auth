@@ -14,6 +14,7 @@ import Register from './Register';
 import ProtectedRoute from './ProtectedRoute';
 import InfoTooltip from './InfoTooltip';
 import api from '../utils/api';
+import auth from '../utils/auth';
 import avatarDefault from '../images/avatar.jpg';
 
 function App() {
