@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import Header from './Header';
 import Main from './Main';
@@ -19,6 +19,7 @@ import avatarDefault from '../images/avatar.jpg';
 
 function App() {
   const location = useLocation();
+  const navigate = useNavigate();
 
   const [currentUser, setCurrentUser] = useState({
     name: 'Жак-Ив Кусто',
@@ -30,13 +31,13 @@ function App() {
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
-  const [isTooltipPopupOpen, setTooltipPopupOpen] = useState(true);
+  const [selectedCard, setSelectedCard] = useState(null);
   const [tooltipData, setTooltipData] = useState({
     type: 'success',
-    message: 'Успешно!'
+    message: 'Успешно!',
+    isOpen: false
   });
-  const [selectedCard, setSelectedCard] = useState(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     Promise.all([
@@ -54,7 +55,7 @@ function App() {
     setEditAvatarPopupOpen(false);
     setEditProfilePopupOpen(false);
     setAddPlacePopupOpen(false);
-    setTooltipPopupOpen(false);
+    setTooltipData({ isOpen: false });
     setSelectedCard(null);
   }
 
@@ -112,12 +113,30 @@ function App() {
       .finally(() => closeAllPopups());
   }
 
-  function handleRegister() {
-
+  function handleRegister(userData) {
+    auth.register(userData)
+      .then((res) => {
+        if (res) {
+          setTooltipData({
+            type: 'success',
+            message: 'Вы успешно зарегистрировались!',
+            isOpen: true
+          });
+          navigate('/sign-in');
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        setTooltipData({
+          type: 'error',
+          message: 'Что-то пошло не так! Попробуйте ещё раз.',
+          isOpen: true
+        });
+      })
   }
   
   function handleLogin() {
-
+    
   }
 
 
@@ -186,7 +205,7 @@ function App() {
       />
 
       <InfoTooltip
-        isOpen={isTooltipPopupOpen}
+        isOpen={tooltipData.isOpen}
         onClose={closeAllPopups}
         type={tooltipData.type}
         message={tooltipData.message}
