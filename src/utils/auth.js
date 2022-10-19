@@ -22,7 +22,7 @@ class Auth {
   }
 
   // Авторизация 
-  login({ email, password }) {
+  authorize({ email, password }) {
     return fetch(`${this._baseUrl}/signin`, {
       method: 'POST',
       headers: {
@@ -44,8 +44,6 @@ class Auth {
     })
     .then(this._handleResponse);
   }
-
-  
 }
 
 const auth = new Auth({

@@ -38,6 +38,9 @@ function App() {
     isOpen: false
   });
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
+
+  useEffect(() => tokenCheck(), []);
 
   useEffect(() => {
     Promise.all([
@@ -49,7 +52,7 @@ function App() {
       setCards(initialCards);
     })
     .catch(err => console.log(err));
-  }, []);
+  }, [isLoggedIn]);
 
   function closeAllPopups() {
     setEditAvatarPopupOpen(false);
@@ -115,7 +118,7 @@ function App() {
 
   function handleRegister(userData) {
     auth.register(userData)
-      .then((res) => {
+      .then(res => {
         if (res) {
           setTooltipData({
             type: 'success',
@@ -135,15 +138,53 @@ function App() {
       })
   }
   
-  function handleLogin() {
-    
+  function handleLogin(userData) {
+    auth.authorize(userData)
+      .then(res => {
+        if (res.token) {
+          localStorage.setItem('token', res.token);
+          setIsLoggedIn(true);
+          setUserEmail(userData.email);
+          navigate('/');
+        }
+      })
+      .catch(err => {
+        console.log(err);
+        setTooltipData({
+          type: 'error',
+          message: 'Что-то пошло не так! Попробуйте ещё раз.',
+          isOpen: true
+        });
+      })
   }
 
+  function handleLogout() {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+    navigate('/sign-in');
+  }
+
+  function tokenCheck() {
+    const token = localStorage.getItem('token');
+    if (token) {
+      auth.getContent(token)
+        .then(res => {
+          setIsLoggedIn(true);
+          setUserEmail(res.data.email);
+          navigate('/');
+        })
+        .catch(err => {
+          console.log(err);
+        })
+    }
+  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <Header
         isLoggedIn={isLoggedIn}
+        email={userEmail}
+        onSignOut={handleLogout}
       />
       <Routes>
         <Route
