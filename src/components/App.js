@@ -43,15 +43,17 @@ function App() {
   useEffect(() => tokenCheck(), []);
 
   useEffect(() => {
-    Promise.all([
-      api.getUserInfo(), 
-      api.getInitialCards()
-    ])
-    .then(([userData, initialCards]) => {
-      setCurrentUser(userData);
-      setCards(initialCards);
-    })
-    .catch(err => console.log(err));
+    if (isLoggedIn) {
+      Promise.all([
+        api.getUserInfo(), 
+        api.getInitialCards()
+      ])
+      .then(([userData, initialCards]) => {
+        setCurrentUser(userData);
+        setCards(initialCards);
+      })
+      .catch(err => console.log(err));
+    }
   }, [isLoggedIn]);
 
   function closeAllPopups() {
